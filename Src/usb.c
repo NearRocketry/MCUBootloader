@@ -5,7 +5,7 @@
 #include "usb.h"
 #include "hid.h"
 
-#define CNTR_MASK	(CNTR_RESETM | CNTR_WKUPM)
+#define CNTR_MASK	(CNTR_RESETM | CNTR_SUSPM | CNTR_WKUPM)
 #define ISTR_MASK	(ISTR_CTR | ISTR_RESET | ISTR_SUSP | ISTR_WKUP)
 
 USB_RxTxBuf_t RxTxBuffer[MAX_EP_NUM];
@@ -82,8 +82,8 @@ void USB_Init(void)
 
 	/* USB devices start as not configured */
 	DeviceConfigured = 0;
-	RCC->APB1ENR |= RCC_APB1ENR_USBEN; // Enable USB clock and CRS clock
-	
+	RCC->APB1ENR |= RCC_APB1ENR_USBEN | RCC_APB1ENR_CRSEN; // Enable USB clock and CRS clock
+
 	NVIC_EnableIRQ(USB_IRQn); // Enable USB interrupt
 
 	*CNTR = CNTR_FRES; // Force Reset USB Peripheral
